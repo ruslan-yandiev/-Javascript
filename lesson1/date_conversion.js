@@ -19,7 +19,7 @@ function checkDate(date) {
 		return false;
 	}
 
-	return true
+	return true;
 }
 
 function showDate(date) {
