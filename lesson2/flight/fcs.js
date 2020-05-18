@@ -1,3 +1,5 @@
+// 'use strict'
+
 function makeTime(hours, minutes) {
     const date = new Date();
     date.setHours(hours);
@@ -190,13 +192,63 @@ function eRegistration(ticket, fullName, nowTime) {
     };
 }
 
+/**
+ * Отчет о рейсе на данный момент
+ * 
+ * @typedef {Object} Report
+ * @property {string} flight Номер рейса
+ * @property {boolean} registration Доступна регистрация на самолет
+ * @property {boolean} complete Регистрация завершена или самолет улетел
+ * @property {number} countOfSeats Общее количество мест
+ * @property {number} reservedSeats Количество купленных (забронированных) мест
+ * @property {number} registeredSeats Количество пассажиров, прошедших регистрацию
+ */
+
+ /**
+ * Функция генерации отчета по рейсу
+ * 
+ *  * проверка рейса
+ *  * подсчет
+ * 
+ * @param {string} flight номер рейса
+ * @param {number} nowTime текущее время
+ * @returns {Report} отчет
+ */
+function flightReport(flightName, nowTime) {
+    let flight = flights[flightName];
+
+    if (!flight) throw new Error('Flight not found');
+
+    let registration  = (flight['registrationStarts'] > nowTime || flight['registartionEnds'] < nowTime) ? false : true;
+
+    let complete = (flight['registartionEnds'] < nowTime) ? true : false;
+
+    let countOfSeats = flight['seats'] + flight['businessSeats']
+
+    let reservedSeats = flight['tickets'].length
+
+    let registeredSeats = 0;
+
+    for (let elem of flight['tickets']) if (elem['registrationTime'] != null) registeredSeats += 1;
+
+    return {
+        flight: flightName,
+        registration: registration,
+        complete: complete,
+        countOfSeats: countOfSeats,
+        reservedSeats: reservedSeats,
+        registeredSeats: registeredSeats
+    };
+}
+
 const a = buyTicket('BH118', makeTime(5, 10), 'Petrov I. I.');
 console.log(a);
 
 const reg = eRegistration('BH118-B50', 'Ivanov I. I.', makeTime(11, 0));
 console.log("reg", reg);
 
-
+const info = flightReport('BH118', makeTime(12, 0));
+console.log("info", info);
 
 function displayFlights() {
     console.log('*** List of all flights ***');
