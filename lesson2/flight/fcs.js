@@ -163,33 +163,20 @@ function buyTicket(flightName, buyTime, fullName, type = 0) {
  * @returns boolean успешна ли регистрация
  */
 function eRegistration(ticket, fullName, nowTime) {
-    let checkId = false;
-    let checkName = false;
     let flight = flights[ticket.split('-')[0]];
 
     if (!flight) throw new Error('Flight not found');
-
     if (flight.registrationStarts > nowTime) throw new Error('Вы слишком рано');
-
     if (flight.registartionEnds < nowTime) throw new Error('Вы опоздали на регистрацию');
 
-    let tickets = flight.tickets;
+    let foundTicket = flight.tickets.find(objTicket => objTicket.id === ticket);
 
-    for (let tick of tickets) {
+    if (!foundTicket) throw new Error('Нет такого билета!');
+    if (foundTicket.fullName !== fullName) throw new Error('Неверное имя');
 
-        if (tick.id == ticket) checkId = true;
+    foundTicket['registrationTime'] = nowTime;
 
-        if (tick.fullName == fullName) checkName = true;
-
-        if (checkId == true && checkName == true) {
-            tick['registrationTime'] = nowTime;
-            return {...tick, valide: 'Регистрация на рейс прошла успешно',};
-        } else if (checkId == false) {
-            throw new Error('Неверный номер билета'); 
-        } else { 
-            throw new Error('Неверное имя');
-        }
-    };
+    return {...foundTicket, valide: 'Регистрация на рейс прошла успешно',};
 }
 
 /**
