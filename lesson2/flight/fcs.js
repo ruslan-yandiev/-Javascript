@@ -169,17 +169,17 @@ function eRegistration(ticket, fullName, nowTime) {
 
     if (!flight) throw new Error('Flight not found');
 
-    if (flight['registrationStarts'] > nowTime) throw new Error('Вы слишком рано');
+    if (flight.registrationStarts > nowTime) throw new Error('Вы слишком рано');
 
-    if (flight['registartionEnds'] < nowTime) throw new Error('Вы опоздали на регистрацию');
+    if (flight.registartionEnds < nowTime) throw new Error('Вы опоздали на регистрацию');
 
-    let tickets = flight['tickets'];
+    let tickets = flight.tickets;
 
     for (let tick of tickets) {
 
-        if (tick['id'] == ticket) checkId = true;
+        if (tick.id == ticket) checkId = true;
 
-        if (tick['fullName'] == fullName) checkName = true;
+        if (tick.fullName == fullName) checkName = true;
 
         if (checkId == true && checkName == true) {
             tick['registrationTime'] = nowTime;
@@ -219,9 +219,9 @@ function flightReport(flightName, nowTime) {
 
     if (!flight) throw new Error('Flight not found');
 
-    let registration  = (flight['registrationStarts'] > nowTime || flight['registartionEnds'] < nowTime) ? false : true;
+    let registration  = (flight.registrationStarts > nowTime || flight.registartionEnds < nowTime) ? false : true;
 
-    let complete = (flight['registartionEnds'] < nowTime) ? true : false;
+    let complete = (flight.registartionEnds < nowTime) ? true : false;
 
     let countOfSeats = flight['seats'] + flight['businessSeats']
 
@@ -229,7 +229,7 @@ function flightReport(flightName, nowTime) {
 
     let registeredSeats = 0;
 
-    for (let elem of flight['tickets']) if (elem['registrationTime'] != null) registeredSeats += 1;
+    for (let elem of flight.tickets) if (elem.registrationTime != null) registeredSeats += 1;
 
     return {
         flight: flightName,
