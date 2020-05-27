@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = {
+module.exports.functions = {
     sayHello,
     addNumber,
     getSumOfPositiveNumbers,
