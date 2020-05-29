@@ -4,6 +4,8 @@ module.exports.functions = {
     sayHello,
     addNumber,
     getSumOfPositiveNumbers,
+    setArr,
+    getArr,
 }
 
 function getSumOfPositiveNumbers(arr) {
@@ -25,3 +27,8 @@ function sayHello() {
 function addNumber(a, b) {
     return a + b;
 }
+
+// Спомощью геттера и сеттера мы можем передать и протестить дефолтное значение переменной arrText и в дальнейшем изменить ее в тесте.
+let arrText = ['a', 'b', 'c'];
+function getArr() { return arrText; }
+function setArr(newArr) { arrText = newArr }

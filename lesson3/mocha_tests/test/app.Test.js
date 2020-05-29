@@ -115,3 +115,14 @@ describe('addNumber', () => {
         assert.isAbove(app.functions.addNumber(5, 5), 9);
     });
 });
+
+// Спомощью геттера и сеттера мы можем передать и протестить дефолтное значение переменной arrText и в дальнейшем изменить ее в тесте.
+describe('arrText', () => {
+    it('arrText should be a', () => {
+        assert.equal(app.functions.getArr()[0], 'a');
+    });
+
+    it('arrText should return type array', () => {
+        assert.typeOf(app.functions.getArr(), 'array');
+    });
+});
