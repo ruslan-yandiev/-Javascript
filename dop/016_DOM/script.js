@@ -43,6 +43,12 @@ for (let elem of circles) {
 //     item.style.backgroundColor = 'blue';
 // });
 
+// Array.from(wrapper.children).forEach(console.log);
+let items = Array.from(wrapper.children);
+// items.forEach(item => item.style.backgroundColor = 'blue');
+// items.forEach((item) => { item.style.backgroundColor = 'blue' });
+// items.forEach(function(item) { item.style.backgroundColor = 'blue' });
+
 // Создадим новый элемент на пример тег div
 let div = document.createElement('div'),
 // создадим текстовый узел
@@ -59,6 +65,9 @@ div.classList.add('black'); // слзданный элемент находит�
 // div.innerHTML = '<h2>Hello World!</h2>';
 // Для безопасности используют несколько иной способ, чтобы добавить только текст без вредоносного кода
 div.textContent = 'Hello World!';
+
+//клонируем тег div с css классом black, true переданный в качестве аргумента укажет, что мы клонируем со всеми внутрениими элементами полностью
+// divCopy = div.cloneNode(true);
 
 
 // Добавим тег div в конец родителя body
