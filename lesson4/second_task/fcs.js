@@ -226,6 +226,47 @@ function flightReport(flightName, nowTime) {
     };
 }
 
+function flightDetails(flightName) {
+    if (typeof flightName !== 'string') throw new Error('invalid data type in argument');
+
+    let flight = flights[flightName];
+
+    if (!flight) throw new Error('Flight not found');
+
+    let div = document.createElement('div');
+    div.id = 'flight - details';
+
+    let h2 = document.createElement('h2');
+    h2.textContent = 'Отчет по рейсу:';
+    div.appendChild(h2);
+
+    for (key in info) {
+        let p = document.createElement('p');
+        p.textContent = `${key}: ${info[key]}`;
+        div.appendChild(p);
+    }
+
+    h2 = document.createElement('h2');
+    h2.textContent = 'Cписок купленных билетов:';
+    div.appendChild(h2);
+
+    let tickets = flight['tickets'];
+
+    for (obj of tickets) {
+        let h4 = document.createElement('h4');
+        h4.textContent = `Билет №${obj.id}:`;
+        div.appendChild(h4);
+
+        for (key in obj) {
+            let p = document.createElement('p');
+            p.textContent = `${key}: ${obj[key]}`;
+            div.appendChild(p);
+        }
+    }
+
+    document.body.appendChild(div);
+}
+
 const a = buyTicket('BH118', makeTime(5, 10), 'Petrov I. I.');
 console.log(a);
 
@@ -234,6 +275,8 @@ console.log("reg", reg);
 
 const info = flightReport('BH118', makeTime(12, 0));
 console.log("info", info);
+
+flightDetails('BH118');
 
 
 // function displayFlights() {
