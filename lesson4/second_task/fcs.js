@@ -208,8 +208,8 @@ function flightReport(flightName, nowTime) {
 
     if (!flight) throw new Error('Flight not found');
 
-    let registration = (flight.registrationStarts > nowTime || flight.registartionEnds < nowTime) ? false : true,
-        complete = (flight.registartionEnds < nowTime) ? true : false,
+    let registration = flight.registrationStarts < nowTime && flight.registartionEnds > nowTime,
+        complete = flight.registartionEnds <= nowTime,
         countOfSeats = flight['seats'] + flight['businessSeats'],
         reservedSeats = flight['tickets'].length,
         registeredSeats = 0;
