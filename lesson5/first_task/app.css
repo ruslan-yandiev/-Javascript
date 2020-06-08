@@ -1,0 +1,11 @@
+table {
+    display: block;
+    margin: 60px auto;
+    max-width: 200px;
+}
+
+    table tr td {
+        width: 35px;
+        height: 35px;
+        border: 1px solid gray;
+    }
