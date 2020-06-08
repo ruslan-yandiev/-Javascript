@@ -1,31 +1,55 @@
 'use strict'
-// получим коллекцию елементов
-const table = document.getElementsByTagName('table')[0];
 
-// назначим событие на событие клик на всю таблицу (делегируем)
-table.addEventListener('click', clickTable);
-// перехватим еще одно событие наведение мыши тип события type: mouseover и используем его
+alert('Нажмите правую кнопку мыши, чтобы выбрать цвет. Зажмите ctrl, чтобы затирать. Поверните колесо мыши, чтобы очистить экран')
+
+let table = document.querySelector('table'),
+    color = 'red';
+
+const colorColection = ['red', 'white', 'black', 'blue', 'yellow', 'green', 'brown', 'orange', 'violet'];
+
+
+for (let step = 50; step > 0; step--) {
+    let tr = document.createElement('tr');
+
+    for (let step = 100; step > 0; step--) {
+        let td = document.createElement('td');
+        tr.appendChild(td);
+    }
+
+    table.appendChild(tr);
+}
+
 table.addEventListener('mouseover', clickTable);
+table.addEventListener('contextmenu', colorTable);
+table.addEventListener('wheel', resetColor);
 
-// у каждого дочернего элемента таблицы будем менять цет после нажатия или у самой таблицы если на нее кликнем 
+function resetColor() {
+    table.querySelectorAll('td').forEach((elem) => {
+        elem.style.backgroundColor = 'transparent';
+    });
+}
+
+function colorTable(event) {
+    event.preventDefault();
+
+    while (true) {
+        color = prompt("Введите цвет: red, white, black, blue, yellow, green, brown, orange, violet", '');
+
+        if (colorColection.includes(color)) {
+            alert(`Выбран цвет: ${color}`);
+            break;
+        } else {
+            alert('Нет такого цвета');
+        }
+    }
+}
+
 function clickTable(event) {
-    // так-как target является Узлом(Нодой), мы можем использовать это, использовав атрибуты узла
     if (event.target.tagName !== 'TD') return;
 
-    // если event.shiftKey (значения по ключу event['shiftKey']) вернет true (тоесть был при клике зажат shift)
-    if (event['shiftKey']) {
+    if (event.ctrlKey) {
         event.target.style.backgroundColor = 'transparent';
-    } else {
-        if (event.target.dataset.codeee) {
-            event.target.style.backgroundColor = 'green';
-        } else if (event.target.dataset.c) {
-            event.target.style.backgroundColor = 'black';
-        } else if (event.ctrlKey) {
-            event.target.style.backgroundColor = 'blue';
-        } else {
-            // однохренственно, что выше
-            event['target']['style']['backgroundColor'] = 'red';
-        }
-        console.log(event, event.target.tagName, event.target.dataset.codeee);
+    } else { 
+        event.target.style.backgroundColor = color;
     }
 };
