@@ -1,11 +1,9 @@
 'use strict'
 
-alert('Нажмите правую кнопку мыши, чтобы выбрать цвет. Зажмите ctrl, чтобы затирать. Поверните колесо мыши, чтобы очистить экран')
-
 let table = document.querySelector('table'),
-    color = 'red';
+    index = 0
 
-const colorColection = ['red', 'white', 'black', 'blue', 'yellow', 'green', 'brown', 'orange', 'violet'];
+const colorColection = ['transparent', 'red', 'black', 'blue', 'yellow', 'green', 'brown', 'orange', 'violet'];
 
 
 for (let step = 50; step > 0; step--) {
@@ -20,7 +18,7 @@ for (let step = 50; step > 0; step--) {
 }
 
 table.addEventListener('mouseover', clickTable);
-table.addEventListener('contextmenu', colorTable);
+table.addEventListener('click', () => { index == (colorColection.length - 1) ? index = 0 : index++ });
 table.addEventListener('wheel', resetColor);
 
 function resetColor() {
@@ -29,27 +27,7 @@ function resetColor() {
     });
 }
 
-function colorTable(event) {
-    event.preventDefault();
-
-    while (true) {
-        color = prompt("Введите цвет: red, white, black, blue, yellow, green, brown, orange, violet", '');
-
-        if (colorColection.includes(color)) {
-            alert(`Выбран цвет: ${color}`);
-            break;
-        } else {
-            alert('Нет такого цвета');
-        }
-    }
-}
-
 function clickTable(event) {
     if (event.target.tagName !== 'TD') return;
-
-    if (event.ctrlKey) {
-        event.target.style.backgroundColor = 'transparent';
-    } else { 
-        event.target.style.backgroundColor = color;
-    }
+    event.target.style.backgroundColor = colorColection[index];
 };
