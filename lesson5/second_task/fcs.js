@@ -109,30 +109,18 @@ function findAvailableSeat(flight, type) {
 function buyTicket(flightName, buyTime, fullName, type = 0) {
     const flight = flights[flightName];
 
-    if (!flight) {
-        alert('Неверно указан рейс');
-        throw new Error('Flight not found');
-    }
+    if (!flight) { throw new Error('Flight not found'); }
 
-    if (flight.tickets.length >= flight.seats) {
-        alert('Нет мест');
-        throw new Error('No seats available');
-    }
+    if (flight.tickets.length >= flight.seats) { throw new Error('No seats available'); }
 
     let testing = /^[a-zA-Zа-яА-ЯёЁ']/.test(fullName)
 
-    if (!testing) {
-        alert('Введите имя');
-        throw new Error('Enter the name');
-    }
+    if (!testing) { throw new Error('Enter the name'); }
 
     if (buyTime > flight.registartionEnds) throw new Error('Time away');
 
     const seat = findAvailableSeat(flight, type);
-    if (!seat) {
-        alert(`No seats of type ${type} available. You can choose another type`);
-        throw new Error(`No seats of type ${type} available. You can choose another type`);
-    }
+    if (!seat) { throw new Error(`No seats of type ${type} available. You can choose another type`); }
 
     let id;
 
@@ -154,7 +142,7 @@ function buyTicket(flightName, buyTime, fullName, type = 0) {
         seat,
     }
 
-    alert(`Ваш билет №${ticket.id}. Место: №${ticket.seat}`);
+    message(ticket.id, ticket.seat);
 
     flight.tickets.push(ticket);
 
@@ -248,8 +236,10 @@ function flightDetails(flightName) {
 
     if (!flight) throw new Error('Flight not found');
 
+    let dropError = document.getElementById('error');
+    if (dropError) document.body.removeChild(dropError);
+
     let dropDiv = document.getElementById('flight - details');
-    
     if (dropDiv) document.body.removeChild(dropDiv);
 
     let div = document.createElement('div');
@@ -310,6 +300,43 @@ function submitHandler(event) {
     data.type.value = '0';
 
     flightDetails('BH118');
+}
+
+window.onerror = function (message) {
+    let dropMassege = document.getElementById('messege');
+    if (dropMassege) document.body.removeChild(dropMassege);
+
+    let dropDiv = document.getElementById('error');
+    if (dropDiv) document.body.removeChild(dropDiv);
+
+    let div = document.createElement('div');
+    div.id = 'error';
+
+    let p = document.createElement('p');
+    p.style.backgroundColor = 'red';
+    p.textContent = `Сообщение об ошибке: ${message}`;
+    div.appendChild(p);
+
+    let divs = document.getElementsByTagName('div')
+
+    document.body.insertBefore(div, divs[0]);
+};
+
+function message(ticketId, ticketSeat) {
+    let dropDiv = document.getElementById('messege');
+    if (dropDiv) document.body.removeChild(dropDiv);
+
+    let div = document.createElement('div');
+    div.id = 'messege';
+
+    let p = document.createElement('p');
+    p.style.backgroundColor = 'green';
+    p.textContent = `Ваш билет №${ticketId}. Место: №${ticketSeat}`;
+    div.appendChild(p);
+
+    let divs = document.getElementsByTagName('div')
+
+    document.body.insertBefore(div, divs[0]);
 }
 
 const a = buyTicket('BH118', makeTime(5, 10), 'Petrov I. I.');
