@@ -115,7 +115,7 @@ function buyTicket(flightName, buyTime, fullName, type = 0) {
 
     let testing = /^[a-zA-Zа-яА-ЯёЁ']/.test(fullName)
 
-    if (!testing) { throw new Error('Enter the name'); }
+    if (!testing) {throw new Error('Invalid characters entered');}
 
     if (buyTime > flight.registartionEnds) throw new Error('Time away');
 
@@ -124,10 +124,14 @@ function buyTicket(flightName, buyTime, fullName, type = 0) {
 
     let id;
 
-    do {
-        id = flight.name + '-' + Math.random().toString().substr(2, 3);
-        exists = flight.tickets.find(item => item.id === id);
-    } while (exists);
+    function ticketGeneration() {
+        do {
+            id = flight.name + '-' + Math.random().toString().substr(2, 3);
+            exists = flight.tickets.find(item => item.id === id);
+        } while (exists);
+    }
+
+    ticketGeneration()
 
     /**
      * @type {Ticket}
@@ -142,7 +146,7 @@ function buyTicket(flightName, buyTime, fullName, type = 0) {
         seat,
     }
 
-    message(ticket.id, ticket.seat);
+    renderTicketInfo(ticket.id, ticket.seat);
 
     flight.tickets.push(ticket);
 
@@ -249,7 +253,7 @@ function flightDetails(flightName) {
     h2.textContent = 'Отчет по рейсу:';
     div.appendChild(h2);
 
-    let info = flightReport('BH118', makeTime(12, 0));
+    const info = flightReport('BH118', makeTime(12, 0));
 
     for (key in info) {
         let p = document.createElement('p');
@@ -303,7 +307,7 @@ function submitHandler(event) {
 }
 
 window.onerror = function (message) {
-    let dropMassege = document.getElementById('messege');
+    let dropMassege = document.getElementById('message');
     if (dropMassege) document.body.removeChild(dropMassege);
 
     let dropDiv = document.getElementById('error');
@@ -322,12 +326,12 @@ window.onerror = function (message) {
     document.body.insertBefore(div, divs[0]);
 };
 
-function message(ticketId, ticketSeat) {
-    let dropDiv = document.getElementById('messege');
+function renderTicketInfo(ticketId, ticketSeat) {
+    let dropDiv = document.getElementById('message');
     if (dropDiv) document.body.removeChild(dropDiv);
 
     let div = document.createElement('div');
-    div.id = 'messege';
+    div.id = 'message';
 
     let p = document.createElement('p');
     p.style.backgroundColor = 'green';

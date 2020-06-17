@@ -1,24 +1,27 @@
 'use strict'
 
-let table = document.querySelector('table'),
+const table = document.querySelector('table'),
     index = 0
 
-const colorColection = ['transparent', 'red', 'black', 'blue', 'yellow', 'green', 'brown', 'orange', 'violet'];
+const colorCollection = ['transparent', 'red', 'black', 'blue', 'yellow', 'green', 'brown', 'orange', 'violet'];
 
+function createTable(height, width) {
+    for (let step = height; step > 0; step--) {
+        let tr = document.createElement('tr');
 
-for (let step = 50; step > 0; step--) {
-    let tr = document.createElement('tr');
+        for (let step = width; step > 0; step--) {
+            let td = document.createElement('td');
+            tr.appendChild(td);
+        }
 
-    for (let step = 100; step > 0; step--) {
-        let td = document.createElement('td');
-        tr.appendChild(td);
+        table.appendChild(tr);
     }
-
-    table.appendChild(tr);
 }
 
+createTable(50, 100);
+
 table.addEventListener('mouseover', clickTable);
-table.addEventListener('click', () => { index == (colorColection.length - 1) ? index = 0 : index++ });
+table.addEventListener('click', getColor);
 table.addEventListener('wheel', resetColor);
 
 function resetColor() {
@@ -27,7 +30,11 @@ function resetColor() {
     });
 }
 
+function getColor() {
+    index == (colorCollection.length - 1) ? index = 0 : index++
+}
+
 function clickTable(event) {
     if (event.target.tagName !== 'TD') return;
-    event.target.style.backgroundColor = colorColection[index];
+    event.target.style.backgroundColor = colorCollection[index];
 };
