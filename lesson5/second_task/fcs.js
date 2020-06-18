@@ -307,8 +307,8 @@ function submitHandler(event) {
 }
 
 window.onerror = function (message) {
-    let dropMassege = document.getElementById('message');
-    if (dropMassege) document.body.removeChild(dropMassege);
+    let dropMessage = document.getElementById('message');
+    if (dropMessage) document.body.removeChild(dropMessage);
 
     let dropDiv = document.getElementById('error');
     if (dropDiv) document.body.removeChild(dropDiv);
