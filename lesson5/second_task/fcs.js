@@ -109,24 +109,29 @@ function findAvailableSeat(flight, type) {
 function buyTicket(flightName, buyTime, fullName, type = 0) {
     const flight = flights[flightName];
 
-    if (!flight)
-        throw new Error('Flight not found');
+    if (!flight) { throw new Error('Flight not found'); }
 
-    if (flight.tickets.length >= flight.seats)
-        throw new Error('No seats available');
+    if (flight.tickets.length >= flight.seats) { throw new Error('No seats available'); }
 
-    if (buyTime > flight.registartionEnds)
-        throw new Error('Time away');
+    let testing = /^[a-zA-Zа-яА-ЯёЁ']/.test(fullName)
+
+    if (!testing) {throw new Error('Invalid characters entered');}
+
+    if (buyTime > flight.registartionEnds) throw new Error('Time away');
 
     const seat = findAvailableSeat(flight, type);
-    if (!seat)
-        throw new Error(`No seats of type ${type} available. You can choose another type`);
+    if (!seat) { throw new Error(`No seats of type ${type} available. You can choose another type`); }
 
     let id;
-    do {
-        id = flight.name + '-' + Math.random().toString().substr(2, 3);
-        exists = flight.tickets.find(item => item.id === id);
-    } while (exists);
+
+    function ticketGeneration() {
+        do {
+            id = flight.name + '-' + Math.random().toString().substr(2, 3);
+            exists = flight.tickets.find(item => item.id === id);
+        } while (exists);
+    }
+
+    ticketGeneration()
 
     /**
      * @type {Ticket}
@@ -140,6 +145,8 @@ function buyTicket(flightName, buyTime, fullName, type = 0) {
         type,
         seat,
     }
+
+    renderTicketInfo(ticket.id, ticket.seat);
 
     flight.tickets.push(ticket);
 
@@ -233,12 +240,20 @@ function flightDetails(flightName) {
 
     if (!flight) throw new Error('Flight not found');
 
+    let dropError = document.getElementById('error');
+    if (dropError) document.body.removeChild(dropError);
+
+    let dropDiv = document.getElementById('flight - details');
+    if (dropDiv) document.body.removeChild(dropDiv);
+
     let div = document.createElement('div');
     div.id = 'flight - details';
 
     let h2 = document.createElement('h2');
     h2.textContent = 'Отчет по рейсу:';
     div.appendChild(h2);
+
+    const info = flightReport('BH118', makeTime(12, 0));
 
     for (key in info) {
         let p = document.createElement('p');
@@ -267,7 +282,7 @@ function flightDetails(flightName) {
     document.body.appendChild(div);
 }
 
-const form = document.getElementById('e-registration-form');
+const form = document.getElementById('buy-ticke-form');
 form.addEventListener('submit', submitHandler);
 
 /**
@@ -275,43 +290,57 @@ form.addEventListener('submit', submitHandler);
  * @param {KeyboardEvent} event
  */
 function submitHandler(event) {
-    //прерываем всплытие что бы форма не отправлялась
     event.preventDefault();
 
-    // alert('ok')
+    let data = form.elements,
+        flightName = data.flightName.value,
+        fullName = data.fullName.value,
+        type = +data.type.value;
 
-    //свойство elements хранит всебе все imputы, что есть в форме, elements является коллекцией(псевдо массив)
-    // console.log(form.elements);
-    // console.log(form.elements.ticket.value);
+    buyTicket(flightName, makeTime(5, 10), fullName, type);
 
-    const data = {
-        ticket: form.elements.ticket.value
-    }
+    data.flightName.value = '';
+    fullName = data.fullName.value = '';
+    data.type.value = '0';
 
-    console.log(data)
+    flightDetails('BH118');
 }
 
-const input = document.getElementsByTagName('input')[0];
-// повесим событие клавиатуры на input
-input.addEventListener('keydown', handler); // событие нажатия клавиатуры
-// input.addEventListener('keypress', handler); // событие удержания кнопки клавиатуры
-// input.addEventListener('keyup', handler); //отжатие клавы
+window.onerror = function (message) {
+    let dropMassege = document.getElementById('message');
+    if (dropMassege) document.body.removeChild(dropMassege);
 
-const validKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    let dropDiv = document.getElementById('error');
+    if (dropDiv) document.body.removeChild(dropDiv);
 
-/**
- * 
- * @param {KeyboardEvent} event 
- */
-function handler(event) {
-    // console.log(event.type, event.key, event.code);
-    
-    if (event.key.length > 1) return; // позволит нам удалить введенное и обновлять даже если выбрано поле ввода
-    // теперь можнобудет вводить только строковые числа
-    if (!validKeys.includes(event['key'])) {
-        event.preventDefault();
-        // event.stopPropagation(); // у меня и без доп прерывания работает
-    }
+    let div = document.createElement('div');
+    div.id = 'error';
+
+    let p = document.createElement('p');
+    p.style.backgroundColor = 'red';
+    p.textContent = `Сообщение об ошибке: ${message}`;
+    div.appendChild(p);
+
+    let divs = document.getElementsByTagName('div')
+
+    document.body.insertBefore(div, divs[0]);
+};
+
+function renderTicketInfo(ticketId, ticketSeat) {
+    let dropDiv = document.getElementById('message');
+    if (dropDiv) document.body.removeChild(dropDiv);
+
+    let div = document.createElement('div');
+    div.id = 'message';
+
+    let p = document.createElement('p');
+    p.style.backgroundColor = 'green';
+    p.textContent = `Ваш билет №${ticketId}. Место: №${ticketSeat}`;
+    div.appendChild(p);
+
+    let divs = document.getElementsByTagName('div')
+
+    document.body.insertBefore(div, divs[0]);
 }
 
 const a = buyTicket('BH118', makeTime(5, 10), 'Petrov I. I.');
@@ -319,26 +348,3 @@ console.log(a);
 
 const reg = eRegistration('BH118-B50', 'Ivanov I. I.', makeTime(11, 0));
 console.log("reg", reg);
-
-const info = flightReport('BH118', makeTime(12, 0));
-console.log("info", info);
-
-flightDetails('BH118');
-
-
-// function displayFlights() {
-//     console.log('*** List of all flights ***');
-//     console.table(flights);
-// }
-
-// function flightDetails2(flightName) {
-//     console.log(`*** Details of flight ${flightName} ***`);
-//     const flight = flights[flightName];
-//     if (!flight) {
-//         console.warn('Flight not found');
-//         return;
-//     }
-
-//     console.table(flight);
-//     console.table(flight.tickets);
-// }

@@ -6,14 +6,24 @@
         <title>Flight Control System</title>
     </head>
     <body>
-        <div id="e-registration-block">
-            <h2>e-Registration</h2>
+        <div id="buy-ticket-block">
+            <h2>Покупка билета</h2>
 
-            <form id="e-registration-form">
-                <input name="ticket">
-                <button type="submit">Register</button>
+            <form id="buy-ticke-form">
+                <label><b>Номер рейса</b></label>
+                <p><input name="flightName"></p>
+
+                <label><b>Ваше полное имя</b></label>
+                <p><input name="fullName"></p>
+
+                <p><b>Тип билета:</b></p>
+                <p><input name="type" type="radio" value="0" checked> Стандарт </p>
+                <p><input name="type" type="radio" value="1"> Бизнес </p>
+
+                <button type="submit">Купить билет</button>
             </form>
         </div>
+
         <script src="fcs.js"></script>
     </body>
 </html>

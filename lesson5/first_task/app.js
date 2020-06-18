@@ -1,31 +1,40 @@
 'use strict'
-// получим коллекцию елементов
-const table = document.getElementsByTagName('table')[0];
 
-// назначим событие на событие клик на всю таблицу (делегируем)
-table.addEventListener('click', clickTable);
-// перехватим еще одно событие наведение мыши тип события type: mouseover и используем его
-table.addEventListener('mouseover', clickTable);
+const table = document.querySelector('table'),
+    index = 0
 
-// у каждого дочернего элемента таблицы будем менять цет после нажатия или у самой таблицы если на нее кликнем 
-function clickTable(event) {
-    // так-как target является Узлом(Нодой), мы можем использовать это, использовав атрибуты узла
-    if (event.target.tagName !== 'TD') return;
+const colorCollection = ['transparent', 'red', 'black', 'blue', 'yellow', 'green', 'brown', 'orange', 'violet'];
 
-    // если event.shiftKey (значения по ключу event['shiftKey']) вернет true (тоесть был при клике зажат shift)
-    if (event['shiftKey']) {
-        event.target.style.backgroundColor = 'transparent';
-    } else {
-        if (event.target.dataset.codeee) {
-            event.target.style.backgroundColor = 'green';
-        } else if (event.target.dataset.c) {
-            event.target.style.backgroundColor = 'black';
-        } else if (event.ctrlKey) {
-            event.target.style.backgroundColor = 'blue';
-        } else {
-            // однохренственно, что выше
-            event['target']['style']['backgroundColor'] = 'red';
+function createTable(height, width) {
+    for (let step = height; step > 0; step--) {
+        let tr = document.createElement('tr');
+
+        for (let step = width; step > 0; step--) {
+            let td = document.createElement('td');
+            tr.appendChild(td);
         }
-        console.log(event, event.target.tagName, event.target.dataset.codeee);
+
+        table.appendChild(tr);
     }
+}
+
+createTable(50, 100);
+
+table.addEventListener('mouseover', clickTable);
+table.addEventListener('click', getColor);
+table.addEventListener('wheel', resetColor);
+
+function resetColor() {
+    table.querySelectorAll('td').forEach((elem) => {
+        elem.style.backgroundColor = 'transparent';
+    });
+}
+
+function getColor() {
+    index == (colorCollection.length - 1) ? index = 0 : index++
+}
+
+function clickTable(event) {
+    if (event.target.tagName !== 'TD') return;
+    event.target.style.backgroundColor = colorCollection[index];
 };
