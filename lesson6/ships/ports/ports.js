@@ -9,13 +9,12 @@ function Port() {
     this.name = 'Port Royal'
 
     this.position = function () {
-        // console.log('isAnchorDroped', this);
-        return _isAnchorDroped;
+        return _position;
     };
 
     // метод moor(ship) пришвартовывает корабль и ставит его на якорь
     this.moor = function (ship) {
-        ship.speed = 0;
+        ship.dropSpeed();
         ship.dropAnchor();
         this.ships.push(ship);
     };

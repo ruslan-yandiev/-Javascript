@@ -12,7 +12,7 @@ function Ship(name, model, position) {
     this.moveTo = function (position) {
         if (_isAnchorDroped) throw new Error('You need to rise anchor');
 
-        this.checkDistance(position);
+        this.distanceСalculation(position);
 
         this.position = {
             x: position.x,
@@ -20,12 +20,14 @@ function Ship(name, model, position) {
         }
     };
 
-    this.checkDistance = function (position) {
-        let x,
-            y;
+    this.distanceСalculation = function (position) {
+        let x = this.position.x > position.x 
+        ? this.position.x - position.x 
+        : position.x - this.position.x;
 
-        this.position.x > position.x ? x = this.position.x - position.x : x = position.x - this.position.x;
-        this.position.y > position.y ? y = this.position.y - position.y : y = position.y - this.position.y;
+        let y = this.position.y > position.y 
+        ? this.position.y - position.y 
+        : position.y - this.position.y;
 
         this.distance += (x + y);
     }
@@ -34,7 +36,9 @@ function Ship(name, model, position) {
         if (_isAnchorDroped) throw new Error('You need to rise anchor');
 
         const directions = 'n w s e'
-        if (!directions.includes(direction)) throw new Error('Нет такого направления. Введите n, w, s или e');
+        if (!directions.includes(direction) || direction == '' || direction == ' ') {
+            throw new Error('Нет такого направления. Введите n, w, s или e');
+        };
 
         if (direction == 'n') {
             this.position.x++;
@@ -66,12 +70,16 @@ function Ship(name, model, position) {
      * @param {boolean} droped
      */
     this.dropAnchor = () => {
-        if (this.speed !== 0) throw new Error('Speed must be 0');
+        if (this.speed) throw new Error('Speed must be 0');
 
         return _isAnchorDroped = true;
     };
 
     this.riseAnchor = function () {
         return _isAnchorDroped = false;
+    };
+
+    this.dropSpeed = function() {
+        this.speed = 0;
     };
 }

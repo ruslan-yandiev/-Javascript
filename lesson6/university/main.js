@@ -3,12 +3,12 @@
 const ivanov = new Student('Ivanov Mihail Petrovich');
 console.log(ivanov);
 console.log(ivanov.fullName());
-console.log(ivanov.surname());
+console.log(ivanov.surnameAndInitials());
 
 const sidorov = new Student('Sidirov Konstantin Robinovich');
 console.log(sidorov);
 console.log(sidorov.fullName());
-console.log(sidorov.surname());
+console.log(sidorov.surnameAndInitials());
 sidorov.is_healthy = false;
 
 const vasiliev = new Student('Vasilev Anton Pupkin');
