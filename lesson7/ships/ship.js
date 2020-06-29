@@ -1,10 +1,14 @@
 'use strict'
 
+module.exports = {
+    Ship
+};
+
 function Ship(name) {
     this.name = name;
     this.colore = 'red';
 
     this.changeColor = function (colore) {
-        this.colore = colore
+        return this.colore = colore
     };
 }

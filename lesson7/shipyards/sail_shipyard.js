@@ -1,6 +1,10 @@
 'use strict'
 
-const SailShipyard = function () {
+module.exports = {
+    SailShipyard
+};
+
+function SailShipyard() {
     this.createShip = function (name, countMast, sailArea) {
         if (typeof sailArea != 'number')
             throw new Error('Укажите общую площадь парусов в виде числа');

@@ -1,6 +1,10 @@
 'use strict'
 
-const MotoShipyard = function () {
+module.exports = {
+    MotoShipyard
+};
+
+function MotoShipyard() {
     this.createShip = function (name, enginePower, bodyMaterial) {
         if (typeof bodyMaterial != 'string')
             throw new Error('Укажите материал корабля в виде строки');
