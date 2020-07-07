@@ -4,29 +4,27 @@ class HtmlElement {
 
     constructor() {
         this._target;
-        this._render = function() { document.body.appendChild(this._target) };
-        this._unrender = function() { document.body.removeChild(this._target) };
         this._template;
     }
 
     set target(element) { 
-        const tegsHTML = [
+        const tagsHTML = [
             'div', 'h1', 'h2', 'h3', 'h4', 'br',
             'a', 'p', 'table', 'td', 'th', 'tr',
             'td', 'form', 'input', 'label', 'button'
         ];
         
-        if (!tegsHTML.includes(element) || element == '' || element == ' ')
+        if (!tagsHTML.includes(element) || element == '' || element == ' ')
             throw new Error(`Нет такого элемента как ${element}`);
 
         this._target = document.createElement(element);
     }
 
-    set template(templ) {
-        if (typeof templ != 'string')
+    set template(template) {
+        if (typeof template != 'string')
             throw new Error('Необходимо передать шаблон в виде строки!');
 
-        this._template = templ;
+        this._template = template;
 
         this.target = this.parsingElement()
     }
@@ -56,10 +54,10 @@ class HtmlElement {
     }
 
     render() {
-        this._render();
-    }
+        document.body.appendChild(this._target)
+    };
 
     unrender() {
-        this._unrender();
-    }
+        document.body.removeChild(this._target)
+    };
 }
