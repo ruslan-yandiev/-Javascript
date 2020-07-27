@@ -6,9 +6,9 @@ let box = document.getElementById('box'),
     circles = document.getElementsByClassName('circle'),
 
     // при поиски с помощью Селекторов необходимо уточнять, что искать (имя класса, тег ...)
-    hearts = document.querySelectorAll('.heart'),
-    oneHearts = document.querySelector('.heart'),
-    wrapper = document.querySelector('.wrapper');
+    hearts = document.querySelectorAll('.heart'), // необходимо код скрипта ставить в конце боди в html файле иначе скрипт отработает быстрее прогрузки дома
+    oneHearts = document.querySelector('.heart'), // необходимо код скрипта ставить в конце боди в html файле иначе скрипт отработает быстрее прогрузки дома
+    wrapper = document.querySelector('.wrapper'); // необходимо код скрипта ставить в конце боди в html файле иначе скрипт отработает быстрее прогрузки дома
 
 // console.log(box);
 // console.log(btns);
