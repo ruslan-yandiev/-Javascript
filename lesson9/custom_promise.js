@@ -18,6 +18,7 @@ class CustomPromise {
         if (successCb) {
             this.__success__.push(successCb)
         }
+
         if (rejectCb) {
             this.__error__.push(rejectCb)
         }
@@ -28,10 +29,12 @@ class CustomPromise {
     }
 
     _resolve(result) {
+        this._status = 'fulfilled'
         this.__success__.forEach(cb => cb(result))
     }
 
     _reject(err) {
+        this._status = 'rejected'
         this.__error__.forEach(cb => cb(err))
     }
 };
