@@ -22,6 +22,8 @@ class CustomPromise {
         if (rejectCb) {
             this.__error__.push(rejectCb)
         }
+
+        return this;
     }
 
     catch (rejectCb) {
@@ -40,12 +42,14 @@ class CustomPromise {
 };
 
 let promise = new CustomPromise((resolve, reject) => {
+    resolve('this is a promise');
+
     setTimeout(() => {
-        reject(1)
+        reject('Ошибочка')
     }, 1000)
 });
 
-promise.then(console.log('Hi'));
+promise.then(console.log('Hi')).then(console.log(1986)).then(title => console.log('MyPrpmise:', title));
 promise.catch((err) => {
     console.log('Rejected', err)
 });
@@ -58,7 +62,7 @@ let promise2 = new CustomPromise((resolve, reject) => {
 
 promise2.then((resolve) => {
     console.log('Result', resolve)
-});
+}).then(console.log);
 
-promise2.then(console.log);
+// promise2.then(console.log);
 
