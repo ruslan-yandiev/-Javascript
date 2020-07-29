@@ -1,48 +1,84 @@
 'use strict'
+class CustomPromise {
+    constructor(callback) {
+        this.__success__ = []
+        this.__error__ = []
+        this._callback = callback
+        this._status = 'pending'
 
-const CustomPromise = function (callback) {
-    this.__success__ = [];
-    this.__error__ = [];
-    this._callback = callback;
+        if (callback) {
+            setTimeout(() => {
+                callback(this._resolve.bind(this), this._reject.bind(this))
+            }, 0)
+        }
+    }
 
-    this.then = function (successCb, rejectCb) {
+    then(successCb, rejectCb) {
         if (successCb) {
             this.__success__.push(successCb)
         }
+
         if (rejectCb) {
             this.__error__.push(rejectCb)
         }
+
+        if (this._status === 'fulfilled') {
+            this.__success__.forEach(cb => cb(this.result));
+            this.__success__ = [];
+        };
+
+        if (this._status === 'rejected') {
+            this.__error__.forEach(cb => cb(this.result));
+            this.__error__ = [];
+        };
+
+        return this;
     }
 
-    this.catch = function (rejectCb) {
+    catch (rejectCb) {
         this.then(null, rejectCb)
     }
 
-    this._resolve = function (result) {
-        this.__success__.forEach(cb => cb(result))
+    _resolve(result) {
+        this.__success__.forEach(cb => cb(result));
+        this._status = 'fulfilled';
     }
 
-    this._reject = function (err) {
-        this.__error__.forEach(cb => cb(err))
+    _reject(err) {
+        this.__error__.forEach(cb => cb(err));
+        this._status = 'rejected';
     }
 
-    setTimeout(() => {
-        callback(this._resolve.bind(this), this._reject.bind(this))
-    }, 0)
+    static resolve(result) {
+        const promise = new CustomPromise();
+        promise.result = result;
+        promise._resolve(result);
+        return promise;
+    }
+
+    static reject(err) {
+        const promise = new CustomPromise();
+        promise.result = err;
+        promise._reject(err);
+        return promise;
+    }
 };
 
-let promise = new CustomPromise((resolve, reject) => {
+
+const promise = new CustomPromise((resolve, reject) => {
+    resolve({ promis: 'this is a promise'});
+
     setTimeout(() => {
-        reject(1)
+        reject('Ошибочка')
     }, 1000)
 });
 
-promise.then(console.log('Hi'));
+promise.then(console.log('Hi')).then(console.log(1986)).then(obj => console.log('MyPrpmise:', obj)).then(title => console.log(title.promis));
 promise.catch((err) => {
     console.log('Rejected', err)
 });
 
-let promise2 = new CustomPromise((resolve, reject) => {
+const promise2 = new CustomPromise((resolve, reject) => {
     setTimeout(() => {
         resolve(123)
     }, 1000)
@@ -50,7 +86,10 @@ let promise2 = new CustomPromise((resolve, reject) => {
 
 promise2.then((resolve) => {
     console.log('Result', resolve)
-});
+}).then(console.log);
 
-promise2.then(console.log);
+const promise4 = CustomPromise.resolve(777);
+promise4.then(i => console.log(i));
 
+const promise5 = CustomPromise.reject('Ошибка промиса5');
+promise5.catch(err => console.log(err));
