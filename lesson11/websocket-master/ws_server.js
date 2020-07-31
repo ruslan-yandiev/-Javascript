@@ -22,6 +22,14 @@ class User {
   }
 };
 
+function sendMessage(channelName, userName, message) {
+  for (let client of clients) {
+    if (client.isLoggedIn(channelName)) {
+      client.connection.send(`channel: ${channelName} user: ${userName} text: ${message}`);
+    }
+  }
+};
+
 wsConnection.on("connection", ws => {
   const user = new User(ws);
   clients.add(user);
