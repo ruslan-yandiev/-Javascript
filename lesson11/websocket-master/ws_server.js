@@ -34,26 +34,51 @@ wsConnection.on("connection", ws => {
   const user = new User(ws);
   clients.add(user);
 
-  user.connection.on("message", function(data) {
+  user.connection.on("message", function (data) {
     const message = JSON.parse(data);
 
     switch (message.command) {
       case "login":
-        return;
+
+        user.name = message.username;
+        user.loginChannel(message.channel);
+        sendMessage(message.channel, user.name, message.command);
+        return
+
       case "logout":
-        return;
+
+        if (user.isLoggedIn(message.channel)) {
+          user.logoutChannel(message.channel);
+          sendMessage(message.channel, user.name, message.command);
+          return
+        } else {
+          return
+        }
+
       case "sendMessage":
-        return;
+
+        if (user.isLoggedIn(message.channel)) {
+          sendMessage(message.channel, user.name, message.text);
+          return
+        } else {
+          return
+        }
+
       case "exitChat":
-        return;
+
+        user.logoutChannel(message.channel);
+        sendMessage(message.channel, user.name, message.command);
+        ws.close();
+        return
+
       default:
+
         ws.send("Unknown command");
-        return;
+        return
     }
   });
 
-  user.connection.on("close", function() {
+  user.connection.on("close", function () {
     clients.delete(user);
   });
-
 });
