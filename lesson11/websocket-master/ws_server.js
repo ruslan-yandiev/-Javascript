@@ -9,12 +9,18 @@ class User {
     this._channels = new Set();
   }
 
-  loginChannel(channelName) {}
+  loginChannel(channelName) {
+    this._channels.add(channelName);
+  }
 
-  logoutChannel(channelName) {}
+  logoutChannel(channelName) {
+    this._channels.delete(channelName);
+  }
 
-  isLoggedIn(channelName) {}
-}
+  isLoggedIn(channelName) {
+    return this._channels.has(channelName);
+  }
+};
 
 wsConnection.on("connection", ws => {
   const user = new User(ws);
